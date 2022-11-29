@@ -1,3 +1,3 @@
-module code.byted.org/jiang/spider
+module github.com/leijiangnan/spider
 
 go 1.18
