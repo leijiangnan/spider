@@ -3,14 +3,9 @@ module github.com/leijiangnan/spider
 go 1.18
 
 require (
-	github.com/antchfx/htmlquery v1.2.5
-	golang.org/x/net v0.2.0
-	golang.org/x/text v0.4.0
+	github.com/PuerkitoBio/goquery v1.8.0
+	golang.org/x/net v0.0.0-20220708220712-1185a9018129
+	golang.org/x/text v0.3.7
 )
 
-require (
-	github.com/PuerkitoBio/goquery v1.8.0 // indirect
-	github.com/andybalholm/cascadia v1.3.1 // indirect
-	github.com/antchfx/xpath v1.2.1 // indirect
-	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
-)
+require github.com/andybalholm/cascadia v1.3.1 // indirect
