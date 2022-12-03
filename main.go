@@ -2,17 +2,18 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
+	"github.com/antchfx/htmlquery"
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 	"io/ioutil"
 	"net/http"
-	"regexp"
 )
 
-var headerRe = regexp.MustCompile(`<img alt="([\s\S]*?) src="[\s\S]*?" width="[\s\S]*?>`)
+// <img alt="外媒：美国法院正式撤销孟晚舟“银行欺诈”等指控" src="https://imagecloud.thepaper.cn/thepaper/image/228/138/686.jpg?x-oss-process=image/resize,w_332" width="318" height="182">
 
 func main() {
 	url := "https://www.thepaper.cn/"
@@ -22,9 +23,13 @@ func main() {
 		return
 	}
 
-	matches := headerRe.FindAllSubmatch(body, -1)
-	for _, m := range matches {
-		fmt.Println("fetch card news:", string(m[1]))
+	doc, err := htmlquery.Parse(bytes.NewReader(body))
+	if err != nil {
+		fmt.Printf("htmlquery.Parse failed:%v\n", err)
+	}
+	nodes := htmlquery.Find(doc, `//img[@width="318"][@height="182"]`)
+	for _, n := range nodes {
+		fmt.Println("fetch card news:", n.Attr[0].Val)
 	}
 }
 
