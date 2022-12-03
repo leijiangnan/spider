@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"github.com/antchfx/htmlquery"
+	"github.com/PuerkitoBio/goquery"
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/unicode"
@@ -23,14 +23,16 @@ func main() {
 		return
 	}
 
-	doc, err := htmlquery.Parse(bytes.NewReader(body))
+	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(body))
 	if err != nil {
-		fmt.Printf("htmlquery.Parse failed:%v\n", err)
+		fmt.Println("read content failed:%v", err)
 	}
-	nodes := htmlquery.Find(doc, `//img[@width="318"][@height="182"]`)
-	for _, n := range nodes {
-		fmt.Println("fetch card news:", n.Attr[0].Val)
-	}
+
+	doc.Find(`img[width="318"][height="182"]`).Each(func(i int, s *goquery.Selection) {
+		val, _ := s.Attr("alt")
+		fmt.Printf("Review %d: %s\n", i, val)
+	})
+
 }
 
 func Fetch(url string) ([]byte, error) {
