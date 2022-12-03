@@ -9,7 +9,10 @@ import (
 	"golang.org/x/text/transform"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 )
+
+var headerRe = regexp.MustCompile(`<img alt="([\s\S]*?) src="[\s\S]*?" width="[\s\S]*?>`)
 
 func main() {
 	url := "https://www.thepaper.cn/"
@@ -19,7 +22,10 @@ func main() {
 		return
 	}
 
-	fmt.Println(string(body))
+	matches := headerRe.FindAllSubmatch(body, -1)
+	for _, m := range matches {
+		fmt.Println("fetch card news:", string(m[1]))
+	}
 }
 
 func Fetch(url string) ([]byte, error) {
